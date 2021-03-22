@@ -27,17 +27,17 @@ impl Window {
 
         //just a vec, that holds some buttons.
         let button_vec = vec![
-            gtk::ColorButton::new_with_rgba(&gdk::RGBA{ alpha:1.0, blue:1.0, green:0.0, red:0.0, }),
-            gtk::ColorButton::new_with_rgba(&gdk::RGBA{ alpha:1.0, blue:0.0, green:1.0, red:0.0, }),
-            gtk::ColorButton::new_with_rgba(&gdk::RGBA{ alpha:1.0, blue:0.0, green:0.0, red:1.0, }),
-            gtk::ColorButton::new_with_rgba(&gdk::RGBA{ alpha:1.0, blue:0.0, green:238.0,red:238.0,}),
+            gtk::ColorButton::new_with_rgba(&gdk::RGBA{ alpha:1.0, blue:1.0, green:0.0, red:0.0, }),//If i can't override the default color chooser to not come up
+            gtk::ColorButton::new_with_rgba(&gdk::RGBA{ alpha:1.0, blue:0.0, green:1.0, red:0.0, }),//these buttons will have to be turned back into regular buttons
+            gtk::ColorButton::new_with_rgba(&gdk::RGBA{ alpha:1.0, blue:0.0, green:0.0, red:1.0, }),//and in that case they have to be styled with css
+            gtk::ColorButton::new_with_rgba(&gdk::RGBA{ alpha:1.0, blue:0.0, green:238.0,red:238.0,}),//if I can disable color chooser, this looks much cewler
         ];
 
         let button_cloner = button_vec[0].clone();
 
         let button_cloner_special = button_vec[0].clone();
 
-        button_cloner_special.connect_clicked(|_| println!("weee"));
+       // button_cloner_special.connect_clicked(|_| println!("weee"));
 
 
        // button_cloner_special.set_property("color",&"blue");
@@ -51,8 +51,10 @@ impl Window {
         //looping over the buttons in the vec to set their size, and also add them to the flowbox
         for temp_but in button_vec {
             temp_but.set_size_request(150, 150);
+            //temp_but.set_sensitive(false);
             flowbox1.add(&temp_but);
         }
+
 
         let start_button = gtk::Button::new_with_label("boop"); //clicking this button will start the timer
 
