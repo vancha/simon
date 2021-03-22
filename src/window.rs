@@ -58,13 +58,15 @@ impl Window {
         //the styles that go with the buttons in the button_vec vec
         let classes=vec!["greenbutton","redbutton","yellowbutton","bluebutton"];
 
-        /*a timer that prints wub wub every second, vital to simons operation
-        let timer = gtk::timeout_add(1000, move || {
-            //button_cloner.emit("activate", &[]);
-            println!("wub wub");
-            glib::Continue(true)
-        });*/
 
+        //this stores the sequence of what the player has to imitate
+        let mut vec_of_presses:Vec<i32> = vec![];
+
+        //this stores the sequence of the button presses
+        let mut vec_of_presses:Vec<i32> = vec![];
+
+        let stupid_clone_1 = button_vec[0].clone();//jeez all that cloning..
+        stupid_clone_1.connect_clicked(move |_| vec_of_presses.push(0));//this is currently the first problem to solve,everything else works :)
 
 
         //looping over the buttons in the vec to set their size, and also add them to the flowbox
