@@ -8,6 +8,13 @@ impl Window {
     pub fn new() -> Self {
         let builder = gtk::Builder::new_from_resource("/org/example/App/window.ui");
 
+        let provider = gtk::CssProvider::new();
+        provider.load_from_path(&"/home/vancha/style.css").unwrap();
+
+        let contextu = gtk::StyleContext::new();
+        let screen = gdk::Screen::get_default().unwrap();
+        gtk::StyleContext::add_provider_for_screen(&screen, &provider, gtk::STYLE_PROVIDER_PRIORITY_APPLICATION);
+
         //this represents the entire view, it holds all other widgets (it's described in window.ui)
         let widget: gtk::ApplicationWindow = builder
             .get_object("window")
@@ -27,20 +34,30 @@ impl Window {
 
         //just a vec, that holds some buttons.
         let button_vec = vec![
-            gtk::ColorButton::new_with_rgba(&gdk::RGBA{ alpha:1.0, blue:1.0, green:0.0, red:0.0, }),//If i can't override the default color chooser to not come up
-            gtk::ColorButton::new_with_rgba(&gdk::RGBA{ alpha:1.0, blue:0.0, green:1.0, red:0.0, }),//these buttons will have to be turned back into regular buttons
-            gtk::ColorButton::new_with_rgba(&gdk::RGBA{ alpha:1.0, blue:0.0, green:0.0, red:1.0, }),//and in that case they have to be styled with css
-            gtk::ColorButton::new_with_rgba(&gdk::RGBA{ alpha:1.0, blue:0.0, green:238.0,red:238.0,}),//if I can disable color chooser, this looks much cewler
+            gtk::Button::new(),//If i can't override the default color chooser to not come up
+            gtk::Button::new(),//these buttons will have to be turned back into regular buttons
+            gtk::Button::new(),//and in that case they have to be styled with css
+            gtk::Button::new(),//if I can disable color chooser, this looks much cewler
         ];
 
-        let button_cloner = button_vec[0].clone();
 
-        let button_cloner_special = button_vec[0].clone();
+        let greenbutton = button_vec[0].clone();
+        let redbutton = button_vec[1].clone();
+        let yellowbutton = button_vec[2].clone();
+        let bluebutton = button_vec[3].clone();
 
-       // button_cloner_special.connect_clicked(|_| println!("weee"));
+        let green_button_context = greenbutton.get_style_context();
+        green_button_context.add_class("greenbutton");
 
+        let red_button_context = redbutton.get_style_context();
+        red_button_context.add_class("redbutton");
 
-       // button_cloner_special.set_property("color",&"blue");
+        let yellow_button_context = yellowbutton.get_style_context();
+        yellow_button_context.add_class("yellowbutton");
+
+        let blue_button_context = bluebutton.get_style_context();
+        blue_button_context.add_class("bluebutton");
+
         //a timer that prints wub wub every second, vital to simons operation
         let timer = gtk::timeout_add(1000, move || {
             //button_cloner.emit("activate", &[]);
@@ -51,7 +68,6 @@ impl Window {
         //looping over the buttons in the vec to set their size, and also add them to the flowbox
         for temp_but in button_vec {
             temp_but.set_size_request(150, 150);
-            //temp_but.set_sensitive(false);
             flowbox1.add(&temp_but);
         }
 
