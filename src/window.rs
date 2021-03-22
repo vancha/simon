@@ -65,8 +65,8 @@ impl Window {
         //this stores the sequence of the button presses
         let mut vec_of_presses:Vec<i32> = vec![];
 
-        let stupid_clone_1 = button_vec[0].clone();//jeez all that cloning..
-        stupid_clone_1.connect_clicked(move |_| vec_of_presses.push(0));//this is currently the first problem to solve,everything else works :)
+       // let stupid_clone_1 = button_vec[0].clone();//jeez all that cloning..
+        //stupid_clone_1.connect_clicked(move |_| vec_of_presses.push(0));//this is currently the first problem to solve,everything else works :)
 
 
         //looping over the buttons in the vec to set their size, and also add them to the flowbox
