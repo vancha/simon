@@ -7,13 +7,29 @@
     <property name="default-width">600</property>
     <property name="default-height">300</property>
     <child>
-      <object class="GtkFlowBox" id="flowbox1">
+      <object class="GtkBox" id="box1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="column-spacing">6</property>
-        <property name="row-spacing">6</property>
-        <property name="min-children-per-line">1</property>
-        <property name="max-children-per-line">2</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <object class="GtkFlowBox" id="flowbox1">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="column-spacing">6</property>
+            <property name="row-spacing">6</property>
+            <property name="min-children-per-line">1</property>
+            <property name="max-children-per-line">2</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="padding">6</property>
+            <property name="position">6</property>
+          </packing>
+        </child>
       </object>
     </child>
     <child type="titlebar">
