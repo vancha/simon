@@ -77,6 +77,7 @@ impl Window {
             flowbox1.add(temp_but);
         }
 
+        glib::timeout_add(1000,|| { println!("second passed"); glib::Continue(true) } );
 
         let start_button = gtk::Button::new_with_label("boop"); //clicking this button will start the timer
 
