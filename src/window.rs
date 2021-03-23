@@ -1,5 +1,9 @@
 use gtk::prelude::*;
 
+use std::sync::Arc;
+use std::cell::{RefCell, RefMut};
+use std::rc::Rc;
+
 pub struct Window {
     pub widget: gtk::ApplicationWindow,
 }
@@ -59,14 +63,40 @@ impl Window {
         let classes=vec!["greenbutton","redbutton","yellowbutton","bluebutton"];
 
 
-        //this stores the sequence of what the player has to imitate
-        let mut vec_of_presses:Vec<i32> = vec![];
-
         //this stores the sequence of the button presses
-        let mut vec_of_presses:Vec<i32> = vec![];
+        let vec_of_player_presses:Rc<RefCell<_>> = Rc::new(RefCell::new(Vec::<i32>::new()));
 
-       // let stupid_clone_1 = button_vec[0].clone();//jeez all that cloning..
-        //stupid_clone_1.connect_clicked(move |_| vec_of_presses.push(0));//this is currently the first problem to solve,everything else works :)
+        let clone_one = Rc::clone(&vec_of_player_presses);
+        let clone_two = Rc::clone(&vec_of_player_presses);
+        let clone_three = Rc::clone(&vec_of_player_presses);
+         let clone_four = Rc::clone(&vec_of_player_presses);
+
+        button_vec[0].clone().connect_clicked( move |_| {
+                                                        let mut u = clone_one.borrow_mut();
+                                                        u.push(0);
+                                                         println!("{}, {:?}",&u.len(),&u);
+                                                        }
+                                             );
+
+
+        button_vec[1].clone().connect_clicked(move |_| {
+                                                        let mut u = clone_two.borrow_mut();
+                                                        u.push(1);
+                                                        println!("{}, {:?}",&u.len(),&u);
+                                                        }
+                                             );
+        button_vec[2].clone().connect_clicked(move |_| {
+                                                        let mut u = clone_three.borrow_mut();
+                                                        u.push(2);
+                                                         println!("{}, {:?}",&u.len(),&u);
+                                                        }
+                                             );
+        button_vec[3].clone().connect_clicked(move |_| {
+                                                        let mut u = clone_four.borrow_mut();
+                                                        u.push(3);
+                                                        println!("{}, {:?}",&u.len(),&u);
+                                                        }
+                                             );
 
 
         //looping over the buttons in the vec to set their size, and also add them to the flowbox
@@ -77,7 +107,7 @@ impl Window {
             flowbox1.add(temp_but);
         }
 
-        glib::timeout_add(1000,|| { println!("second passed"); glib::Continue(true) } );
+        glib::timeout_add(1000,|| { println!("second passed"); glib::Continue(true) } );//
 
         let start_button = gtk::Button::new_with_label("boop"); //clicking this button will start the timer
 
