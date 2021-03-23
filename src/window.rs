@@ -3,6 +3,8 @@ use gtk::prelude::*;
 use std::sync::Arc;
 use std::cell::{RefCell, RefMut};
 use std::rc::Rc;
+use std::sync::Mutex;
+
 
 pub struct Window {
     pub widget: gtk::ApplicationWindow,
@@ -62,14 +64,13 @@ impl Window {
         //the styles that go with the buttons in the button_vec vec
         let classes=vec!["greenbutton","redbutton","yellowbutton","bluebutton"];
 
-
         //this stores the sequence of the button presses
         let vec_of_player_presses:Rc<RefCell<_>> = Rc::new(RefCell::new(Vec::<i32>::new()));
 
         let clone_one = Rc::clone(&vec_of_player_presses);
         let clone_two = Rc::clone(&vec_of_player_presses);
         let clone_three = Rc::clone(&vec_of_player_presses);
-         let clone_four = Rc::clone(&vec_of_player_presses);
+        let clone_four = Rc::clone(&vec_of_player_presses);
 
         button_vec[0].clone().connect_clicked( move |_| {
                                                         let mut u = clone_one.borrow_mut();
@@ -107,13 +108,38 @@ impl Window {
             flowbox1.add(temp_but);
         }
 
-        glib::timeout_add(1000,|| { println!("second passed"); glib::Continue(true) } );//
+        //how often have i blinked?
+        let how_many_bleeps:Mutex<i32> = Mutex::new(0);
+        let how_many_bleeps_total:Mutex<i32> = Mutex::new(0);
+
+        //handler that uses the blink counter
+        let handler = glib::timeout_add(1000,move ||
+        {
+            let mut total_bleep = how_many_bleeps_total.lock().unwrap();
+            let mut bleeper = how_many_bleeps.lock().unwrap();
+            *bleeper += 1;
+            println!("{} second passed",bleeper);
+            if *bleeper >= *total_bleep {
+                println!("I should stop..");
+                glib::Continue(false)
+            } else {
+                println!("total: {}, bleeps: {}",*total_bleep, *bleeper);
+                glib::Continue(true)
+            }
+        });//
 
         let start_button = gtk::Button::new_with_label("boop"); //clicking this button will start the timer
-
         outerbox.pack_start(&start_button, false, false, 0);
 
-        start_button.connect_clicked(|_| println!("the game is starting"));
+        let vec_of_computer_presses:Rc<RefCell<_>> = Rc::new(RefCell::new(Vec::<i32>::new()));
+        let mut times = 0;
+        let mut seconds = 0;
+
+        start_button.connect_clicked(move |_| {
+            let mut addvec = vec_of_computer_presses.borrow_mut();
+            addvec.push(0);
+            println!("{}",&addvec.len());
+        });
 
         widget.show_all();
 
